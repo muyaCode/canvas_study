@@ -2,12 +2,12 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<title>绘制三个不同颜色和形状的箭头</title>
+		<title>06-和线相关的属性和方法</title>
 		<style>
 			canvas {
 				border: 1px solid #ccc;
-                display: block;
-                margin: 0 auto;
+				display: block;
+				margin: 0 auto;
 			}
 		</style>
 	</head>
@@ -18,7 +18,7 @@
 			var ctx = myCanvas.getContext("2d");
 
 			/*画平行线*/
-            // 第一个蓝色箭头
+			// 第一个蓝色箭头
 			ctx.beginPath();
 			ctx.moveTo(100, 100);
 			ctx.lineTo(200, 20);
@@ -29,7 +29,7 @@
 			ctx.lineJoin = "miter"; // 拐角类型：尖角(默认)
 			ctx.stroke();
 
-            // 第二个红色箭头
+			// 第二个红色箭头
 			ctx.beginPath();
 			ctx.moveTo(100, 200);
 			ctx.lineTo(200, 120);
@@ -40,7 +40,7 @@
 			ctx.lineJoin = "bevel"; // 拐角类型：斜角
 			ctx.stroke();
 
-            // 第三个绿色箭头
+			// 第三个绿色箭头
 			ctx.beginPath();
 			ctx.moveTo(100, 300);
 			ctx.lineTo(200, 220);

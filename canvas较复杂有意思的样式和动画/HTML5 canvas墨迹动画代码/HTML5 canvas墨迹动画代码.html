@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>HTML5 canvas墨迹动画代码</title>
+
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
+
+			canvas {
+				display: block;
+			}
+		</style>
+	</head>
+	<body>
+		<script src="js/TweenMax.min.js"></script>
+
+		<canvas id="c"></canvas>
+
+		<script type="text/javascript">
+			var c = document.getElementById("c"),
+				ctx = c.getContext("2d"),
+				cw = (c.width = window.innerWidth),
+				ch = (c.height = window.innerHeight),
+				paper = new Image(200, 200),
+				ink = new Image(75, 100), // Dimensions of the viewable area, not the entire sprite-sheet
+				numFrames = 7,
+				n = 0,
+				data = {};
+
+			window.addEventListener("load", function () {
+				window.addEventListener("touchstart", function (e) {
+					e.preventDefault();
+					setData(e.touches[0].clientX, e.touches[0].clientY);
+					setTween();
+				});
+
+				window.addEventListener("click", function (e) {
+					setData(e.offsetX, e.offsetY);
+					setTween();
+				});
+
+				drawBg();
+
+				// First run, generate a few drips
+				for (var i = 0; i < 5; i++) {
+					setData(
+						cw / 2 - 150 + 200 * Math.random(),
+						ch / 2 - 100 + 200 * Math.random()
+					);
+					setTween(i / 10);
+				}
+			});
+
+			function setData(inputX, inputY) {
+				n < 3 ? n++ : (n = 0);
+				data = {
+					frame: 0,
+					x: inputX,
+					y: inputY,
+					s: 75 * n,
+					scale: 0.7 + Math.random() * 0.5,
+					rotate: Math.random() * Math.PI * 2,
+				};
+			}
+
+			function setTween(delay = 0) {
+				TweenMax.to(data, 0.45, {
+					delay: delay,
+					frame: numFrames,
+					ease: SteppedEase.ease.config(numFrames),
+					onUpdate: run,
+					onUpdateParams: [data],
+				});
+			}
+
+			function drawBg(alpha = 1) {
+				var pattern = ctx.createPattern(paper, "repeat");
+				ctx.globalAlpha = alpha;
+				ctx.fillStyle = pattern; //'#fff';
+				ctx.fillRect(0, 0, cw, ch);
+			}
+
+			function run(data) {
+				// Thank you @Shaw for help with the random scale+rotation - https://codepen.io/shshaw/
+				ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset the transforms from previous draws
+				ctx.globalCompositeOperation = "source-atop"; // Fade old drops by redrawing background texture
+				drawBg(0.01); //
+				ctx.globalAlpha = 1; // Restore globalAlpha that was modified in drawBg()
+				ctx.translate(data.x, data.y); // Translate over to the mouse position to center your scaling & rotation on that point
+				ctx.scale(data.scale, data.scale); // Randomized scale
+				ctx.rotate(data.rotate); // Randomized rotation in radians
+				ctx.translate(-data.x, -data.y); // Move back to the starting position
+				ctx.globalCompositeOperation = ["darken", "multiply"][
+					Math.round(Math.random())
+				];
+				ctx.drawImage(
+					ink,
+					data.s,
+					data.frame * ink.height,
+					ink.width,
+					ink.height,
+					data.x - 33,
+					data.y - ink.height / 2,
+					ink.width,
+					ink.height
+				);
+			}
+
+			window.addEventListener("resize", function () {
+				cw = c.width = window.innerWidth;
+				ch = c.height = window.innerHeight;
+				drawBg();
+			});
+
+			paper.src = "img/mask.jpg";
+			ink.src = "img/mo.png";
+		</script>
+	</body>
+</html>

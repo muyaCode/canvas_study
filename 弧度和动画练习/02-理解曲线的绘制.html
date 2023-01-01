@@ -1,39 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <style>
-        canvas {
-            border: 1px solid #ccc;
-        }
-    </style>
-</head>
-<body>
-<canvas width="600" height="400"></canvas>
-<script>
-    var myCanvas = document.querySelector('canvas');
-    var ctx = myCanvas.getContext('2d');
-
-    /*1.体验曲线的绘制*/
-    /*2.线是由点构成的*/
-    /*3.曲线可以由数学公式得来*/
-
-    /*公式：y = x/2 */
-    /*公式：y = (x + 2) ^2  */
-    /*公式：y = sin(x) */
-
-    for(var i = 1 ; i < 600 ; i ++){
-        var x = i;
-        //var y = x/2;
-        //var y = Math.pow(x/10-30,2);
-        var y = 50*Math.sin(x/10) + 100;
-        ctx.lineTo(x,y);
-    }
-    ctx.stroke();
+	<head>
+		<meta charset="UTF-8" />
+		<title>02-理解曲线的绘制</title>
+		<style>
+			canvas {
+				border: 1px solid #ccc;
+				display: block;
+				margin: 0 auto;
+			}
+		</style>
+	</head>
+	<body>
+		<!--
+    1.什么是弧度  是一种长度的描述单位
+    2.一个弧度怎么去描述  一个圆有多少个弧度  2 * π
+    3.一弧度有多长  一个弧度一个半径的长度
 
 
+    角度：一个圆是360度
+    半径：已一个点为中心多长为放射半径
+    周长：2 * π * r
 
-</script>
-</body>
+
+    最终的结论：一个角度等于多少弧度  π/180
+    -->
+		<canvas width="600" height="400"></canvas>
+		<script>
+			var myCanvas = document.querySelector("canvas");
+			var ctx = myCanvas.getContext("2d");
+
+			/*1.体验曲线的绘制*/
+			/*2.线是由点构成的*/
+			/*3.曲线可以由数学公式得来*/
+
+			/*公式：y = x/2 */
+			/*公式：y = (x + 2) ^2  */
+			/*公式：y = sin(x) */
+
+			for (var i = 1; i < 600; i++) {
+				var x = i;
+				//var y = x/2;
+				//var y = Math.pow(x/10-30,2);
+				var y = 50 * Math.sin(x / 10) + 100;
+				ctx.lineTo(x, y);
+			}
+			ctx.stroke();
+		</script>
+	</body>
 </html>

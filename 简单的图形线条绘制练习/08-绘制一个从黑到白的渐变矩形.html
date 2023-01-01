@@ -19,22 +19,13 @@
 
 			/*绘制一个矩形*/
 
-			// /*线是由点构成的：用线绘制矩形*/
-			// ctx.moveTo(100, 100);
-			// ctx.lineTo(355, 100);
-			// ctx.lineWidth = 30;
-			// /*颜色的填充*/
-			// ctx.strokeStyle = '#888';
-			// /*黑到白的渐变颜色*/
-			// ctx.stroke();
-
 			/*线是由点构成的：用线绘制矩形*/
 			ctx.lineWidth = 30;
 			for (var i = 0; i < 255; i++) {
 				ctx.beginPath();
 				ctx.moveTo(100 + i - 1, 100);
 				ctx.lineTo(100 + i, 100);
-				ctx.strokeStyle = "rgb(" + i + ",0,0)";
+				ctx.strokeStyle = "rgb(" + i + ",0,0)"; // 渐变
 				ctx.stroke();
 			}
 		</script>

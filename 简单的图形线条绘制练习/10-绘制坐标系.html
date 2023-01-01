@@ -24,8 +24,8 @@
 			/*5.确定箭头的大小  是个等腰三角形  10 */
 			/*6.绘制箭头填充*/
 
-			var space = 20;
-			var arrowSize = 10;
+			var space = 20; // 间距
+			var arrowSize = 10; // 箭头尺寸大小
 
 			/*计算原点*/
 			var canvasWidth = ctx.canvas.width;
@@ -38,7 +38,7 @@
 			ctx.beginPath();
 			ctx.moveTo(x0, y0);
 			ctx.lineTo(canvasWidth - space, y0);
-			/*箭头*/
+			/*x轴箭头绘制*/
 			ctx.lineTo(canvasWidth - space - arrowSize, y0 + arrowSize / 2);
 			ctx.lineTo(canvasWidth - space - arrowSize, y0 - arrowSize / 2);
 			ctx.lineTo(canvasWidth - space, y0);
@@ -49,7 +49,7 @@
 			ctx.beginPath();
 			ctx.moveTo(x0, y0);
 			ctx.lineTo(space, space);
-			/*箭头*/
+			/*y轴箭头绘制*/
 			ctx.lineTo(space + arrowSize / 2, space + arrowSize);
 			ctx.lineTo(space - arrowSize / 2, space + arrowSize);
 			ctx.lineTo(space, space);

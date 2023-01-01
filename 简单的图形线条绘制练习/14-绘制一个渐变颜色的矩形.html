@@ -9,11 +9,12 @@
 				display: block;
 				margin: 0 auto;
 			}
-			/*        .linearGradient{
-            width: 400px;
-            height: 100px;
-            background-image: linear-gradient(to right,pink,blue);
-        }*/
+			/* 方法3：css渐变 */
+			/* .linearGradient {
+				width: 400px;
+				height: 100px;
+				background-image: linear-gradient(to right, pink, blue);
+			} */
 		</style>
 	</head>
 	<body>
@@ -23,23 +24,24 @@
 			var myCanvas = document.querySelector("canvas");
 			var ctx = myCanvas.getContext("2d");
 
-			/*fillStyle 'pink' '#000' 'rgb()' 'rgba()' */
-			/*也可以使用一个渐变的方案了填充矩形*/
-			/*创建一个渐变的方案*/
-			/*渐变是由长度的*/
+			// pink---->blue
+			// 回想线性渐变---->要素 方向  起始颜色 结束颜色
+			// 通过两个点的坐标可以控制 渐变方向
+
+
+			/*方法1：填充颜色属性：fillStyle = 'pink'|'#000'|'rgb()'|'rgba()' */
+
+			/*方法2：使用一个渐变的createLinearGradient()方法填充矩形*/
 			/*x0y0 起始点 x1y1 结束点  确定长度和方向*/
-			var linearGradient = ctx.createLinearGradient(100, 100, 500, 400);
+			var linearGradient = ctx.createLinearGradient(100, 100, 500, 400); // 创建一个渐变的方案
+			// 添加渐变：渐变是有长度的
 			linearGradient.addColorStop(0, "pink");
 			//linearGradient.addColorStop(0.5,'red');
 			linearGradient.addColorStop(1, "blue");
 
 			ctx.fillStyle = linearGradient;
-
+			// 填充矩形
 			ctx.fillRect(100, 100, 400, 100);
-
-			// pink---->blue
-			// 回想线性渐变---->要素 方向  起始颜色 结束颜色
-			// 通过两个点的坐标可以控制 渐变方向
 		</script>
 	</body>
 </html>

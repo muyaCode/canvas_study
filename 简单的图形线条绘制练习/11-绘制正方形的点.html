@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<title>11-绘制点</title>
+		<title>11-绘制正方形的点</title>
 		<style>
 			canvas {
 				border: 1px solid #ccc;
@@ -21,14 +21,14 @@
 			/*2.点的尺寸*/
 			/*3.以坐标中心绘制点*/
 
-			/*点坐标*/
+			// 点的坐标
 			var coordinate = {
 				x: 100,
 				y: 100,
 			};
-			/*点尺寸*/
+			// 点的尺寸
 			var dottedSize = 10;
-
+			// 以坐标中心绘制点
 			ctx.moveTo(coordinate.x - dottedSize / 2, coordinate.y - dottedSize / 2);
 			ctx.lineTo(coordinate.x + dottedSize / 2, coordinate.y - dottedSize / 2);
 			ctx.lineTo(coordinate.x + dottedSize / 2, coordinate.y + dottedSize / 2);

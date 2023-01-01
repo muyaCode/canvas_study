@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<title>12-折线图</title>
+		<title>12-绘制折线图</title>
 		<style>
 			canvas {
 				border: 1px solid #ccc;
@@ -16,21 +16,21 @@
 		<script>
 			/*1.构造函数*/
 			var LineChart = function (ctx) {
-				/*获取绘图工具*/
+				// 获取绘图工具
 				this.ctx = ctx || document.querySelector("canvas").getContext("2d");
-				/*画布的大小*/
+				// 画布的大小
 				this.canvasWidth = this.ctx.canvas.width;
 				this.canvasHeight = this.ctx.canvas.height;
-				/*网格的大小*/
+				// 网格的大小
 				this.gridSize = 10;
-				/*坐标系的间距*/
+				// 坐标系的间距
 				this.space = 20;
-				/*坐标原点*/
+				// 坐标原点
 				this.x0 = this.space;
 				this.y0 = this.canvasHeight - this.space;
-				/*箭头的大小*/
+				// 箭头的大小
 				this.arrowSize = 10;
-				/*绘制点*/
+				// 绘制点
 				this.dottedSize = 6;
 				/*点的坐标 和数据有关系  数据可视化*/
 			};
@@ -42,7 +42,7 @@
 			};
 			/*绘制网格*/
 			LineChart.prototype.drawGrid = function () {
-				/*x方向的线*/
+				// x方向的线
 				var xLineTotal = Math.floor(this.canvasHeight / this.gridSize);
 				this.ctx.strokeStyle = "#eee";
 				for (var i = 0; i <= xLineTotal; i++) {
@@ -51,7 +51,7 @@
 					this.ctx.lineTo(this.canvasWidth, i * this.gridSize - 0.5);
 					this.ctx.stroke();
 				}
-				/*y方向的线*/
+				// y方向的线
 				var yLineTotal = Math.floor(this.canvasWidth / this.gridSize);
 				for (var i = 0; i <= yLineTotal; i++) {
 					this.ctx.beginPath();
@@ -62,7 +62,7 @@
 			};
 			/*绘制坐标系*/
 			LineChart.prototype.drawAxis = function () {
-				/*X轴*/
+				// X轴
 				this.ctx.beginPath();
 				this.ctx.strokeStyle = "#000";
 				this.ctx.moveTo(this.x0, this.y0);
@@ -78,7 +78,7 @@
 				this.ctx.lineTo(this.canvasWidth - this.space, this.y0);
 				this.ctx.stroke();
 				this.ctx.fill();
-				/*Y轴*/
+				// Y轴
 				this.ctx.beginPath();
 				this.ctx.strokeStyle = "#000";
 				this.ctx.moveTo(this.x0, this.y0);
@@ -101,15 +101,15 @@
 				/*2.再进行点的绘制*/
 				/*3.把线连起来*/
 				var that = this;
-				/*记录当前坐标*/
+				// 记录当前坐标
 				var prevCanvasX = 0;
 				var prevCanvasY = 0;
 				data.forEach(function (item, i) {
-					/* x = 原点的坐标 + 数据的坐标 */
-					/* y = 原点的坐标 - 数据的坐标 */
+					// x = 原点的坐标 + 数据的坐标
+					// y = 原点的坐标 - 数据的坐标
 					var canvasX = that.x0 + item.x;
 					var canvasY = that.y0 - item.y;
-					/*绘制点*/
+					// 绘制点
 					that.ctx.beginPath();
 					that.ctx.moveTo(
 						canvasX - that.dottedSize / 2,
@@ -144,7 +144,7 @@
 						that.ctx.lineTo(canvasX, canvasY);
 						that.ctx.stroke();
 					}
-					/*记录当前的坐标，下一次要用*/
+					// 记录当前的坐标，下一次要用
 					prevCanvasX = canvasX;
 					prevCanvasY = canvasY;
 				});

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>绘制三个不同颜色和形状的箭头</title>
+		<style>
+			canvas {
+				border: 1px solid #ccc;
+                display: block;
+                margin: 0 auto;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas width="600" height="400"></canvas>
+		<script>
+			var myCanvas = document.querySelector("canvas");
+			var ctx = myCanvas.getContext("2d");
+
+			/*画平行线*/
+            // 第一个蓝色箭头
+			ctx.beginPath();
+			ctx.moveTo(100, 100);
+			ctx.lineTo(200, 20);
+			ctx.lineTo(300, 100);
+			ctx.strokeStyle = "blue"; // 路径笔触颜色、渐变或模式：蓝色
+			ctx.lineWidth = 10;
+			ctx.lineCap = "butt"; // 线条的结束端点样式：平直的边缘(默认)
+			ctx.lineJoin = "miter"; // 拐角类型：尖角(默认)
+			ctx.stroke();
+
+            // 第二个红色箭头
+			ctx.beginPath();
+			ctx.moveTo(100, 200);
+			ctx.lineTo(200, 120);
+			ctx.lineTo(300, 200);
+			ctx.strokeStyle = "red"; // 路径笔触颜色、渐变或模式：红色
+			ctx.lineWidth = 20;
+			ctx.lineCap = "square"; // 线条的结束端点样式：正方形
+			ctx.lineJoin = "bevel"; // 拐角类型：斜角
+			ctx.stroke();
+
+            // 第三个绿色箭头
+			ctx.beginPath();
+			ctx.moveTo(100, 300);
+			ctx.lineTo(200, 220);
+			ctx.lineTo(300, 300);
+			ctx.strokeStyle = "green"; // 路径笔触颜色、渐变或模式：绿色
+			ctx.lineWidth = 30;
+			ctx.lineCap = "round"; // 线条的结束端点样式：圆形
+			ctx.lineJoin = "round"; // 拐角类型：圆形
+			ctx.stroke();
+		</script>
+	</body>
+</html>

@@ -20,16 +20,16 @@
 			var w = ctx.canvas.width;
 			var h = ctx.canvas.height;
 
-			/*分成几等分*/
-			var num = 360;
-			/*一份多少弧度*/
+			// 分成几等分
+			var num = 6;
+			// 一份多少弧度
 			var angle = (Math.PI * 2) / num;
 
-			/*原点坐标*/
+			// 原点坐标
 			var x0 = w / 2;
 			var y0 = h / 2;
 
-			/*获取随机颜色*/
+			// 随机颜色方法
 			var getRandomColor = function () {
 				var r = Math.floor(Math.random() * 256);
 				var g = Math.floor(Math.random() * 256);
@@ -37,17 +37,19 @@
 				return "rgb(" + r + "," + g + "," + b + ")";
 			};
 
-			/*上一次绘制的结束弧度等于当前次的起始弧度*/
-			//var startAngle = 0;
+			// 上一次绘制的结束弧度等于当前次的起始弧度
 			for (var i = 0; i < num; i++) {
+				// 起始和结束
 				var startAngle = i * angle;
 				var endAngle = (i + 1) * angle;
+
+				// 开始绘制
 				ctx.beginPath();
 				ctx.moveTo(x0, y0);
 				ctx.arc(x0, y0, 150, startAngle, endAngle);
-				/*随机颜色*/
-				ctx.fillStyle = getRandomColor();
-				ctx.fill();
+
+				ctx.fillStyle = getRandomColor(); // 随机颜色
+				ctx.fill(); // 填充模式
 			}
 		</script>
 	</body>

@@ -12,30 +12,29 @@
 		</style>
 	</head>
 	<body>
-		<!--<img src="image/01.jpg" alt="">-->
 		<canvas width="600" height="400"></canvas>
 		<script>
 			var myCanvas = document.querySelector("canvas");
 			var ctx = myCanvas.getContext("2d");
 
 			var image = new Image();
+			/*图片加载完成*/
 			image.onload = function () {
-				/*图片加载完成*/
-				/*动态的去获取当前图片的尺寸*/
+				// 动态的去获取当前图片的尺寸
 				var imageWidth = image.width;
 				var imageHeight = image.height;
-				/*计算出每一个小人物的尺寸*/
+				// 计算出每一个小人物的尺寸
 				var personWidth = imageWidth / 4;
 				var personHeight = imageHeight / 4;
-				/*位截取图片*/
-				/*帧动画  在固定的时间间隔更换显示的图片  根据图片的索引*/
-				var index = 0;
 
+				/***** 位截取图片 *****/
+				// 帧动画：在固定的时间间隔，根据图片的索引更换显示的图片
+				var index = 0;
 				/*绘制在画布的中心*/
-				/*图片绘制的起始点*/
+				// 图片绘制的起始点
 				var x0 = ctx.canvas.width / 2 - personWidth / 2;
 				var y0 = ctx.canvas.height / 2 - personHeight / 2;
-
+				// 绘制图片截取第一个精灵图
 				ctx.drawImage(
 					image,
 					0,
@@ -47,9 +46,12 @@
 					personWidth,
 					personHeight
 				);
+				// 定时按顺序绘制其他精灵图
 				setInterval(function () {
-					index++;
+					index++; // 裁剪的索引位置
+					// 绘制之前清除已经绘制的精灵图，避免重复绘制
 					ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+					// 通过`drawImage()`方法的9个参数的使用来截取图片位置，实现帧动画
 					ctx.drawImage(
 						image,
 						index * personWidth,
@@ -61,6 +63,7 @@
 						personWidth,
 						personHeight
 					);
+					// 只绘制前3帧
 					if (index >= 3) {
 						index = 0;
 					}

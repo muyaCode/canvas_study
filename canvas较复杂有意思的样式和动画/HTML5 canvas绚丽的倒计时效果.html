@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>HTML5 canvas绚丽的倒计时效果</title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			canvas {
+				display: block;
+			}
+		</style>
+	</head>
+  <!-- 参考：https://codepen.io/ickedesign/pen/peRvwO -->
+	<body style="height: 100%;">
+		<!--为了自适应，需要将body的高度和canvas画布的高度设置为100%-->
+		<canvas id="canvas" style="width: 100%; height: 100%">
+			当前浏览器不支持Canvas，请选择IE9以上的浏览器或其它更高级的浏览器
+		</canvas>
+	</body>
+
+	<script>
+		// 数字点阵
+		digit = [
+			[
+				[0, 0, 1, 1, 1, 0, 0],
+				[0, 1, 1, 0, 1, 1, 0],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[0, 1, 1, 0, 1, 1, 0],
+				[0, 0, 1, 1, 1, 0, 0],
+			], // 0
+			[
+				[0, 0, 0, 1, 1, 0, 0],
+				[0, 1, 1, 1, 1, 0, 0],
+				[0, 0, 0, 1, 1, 0, 0],
+				[0, 0, 0, 1, 1, 0, 0],
+				[0, 0, 0, 1, 1, 0, 0],
+				[0, 0, 0, 1, 1, 0, 0],
+				[0, 0, 0, 1, 1, 0, 0],
+				[0, 0, 0, 1, 1, 0, 0],
+				[0, 0, 0, 1, 1, 0, 0],
+				[1, 1, 1, 1, 1, 1, 1],
+			], // 1
+			[
+				[0, 1, 1, 1, 1, 1, 0],
+				[1, 1, 0, 0, 0, 1, 1],
+				[0, 0, 0, 0, 0, 1, 1],
+				[0, 0, 0, 0, 1, 1, 0],
+				[0, 0, 0, 1, 1, 0, 0],
+				[0, 0, 1, 1, 0, 0, 0],
+				[0, 1, 1, 0, 0, 0, 0],
+				[1, 1, 0, 0, 0, 0, 0],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 1, 1, 1, 1, 1],
+			], // 2
+			[
+				[1, 1, 1, 1, 1, 1, 1],
+				[0, 0, 0, 0, 0, 1, 1],
+				[0, 0, 0, 0, 1, 1, 0],
+				[0, 0, 0, 1, 1, 0, 0],
+				[0, 0, 1, 1, 1, 0, 0],
+				[0, 0, 0, 0, 1, 1, 0],
+				[0, 0, 0, 0, 0, 1, 1],
+				[0, 0, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[0, 1, 1, 1, 1, 1, 0],
+			], // 3
+			[
+				[0, 0, 0, 0, 1, 1, 0],
+				[0, 0, 0, 1, 1, 1, 0],
+				[0, 0, 1, 1, 1, 1, 0],
+				[0, 1, 1, 0, 1, 1, 0],
+				[1, 1, 0, 0, 1, 1, 0],
+				[1, 1, 1, 1, 1, 1, 1],
+				[0, 0, 0, 0, 1, 1, 0],
+				[0, 0, 0, 0, 1, 1, 0],
+				[0, 0, 0, 0, 1, 1, 0],
+				[0, 0, 0, 1, 1, 1, 1],
+			], // 4
+			[
+				[1, 1, 1, 1, 1, 1, 1],
+				[1, 1, 0, 0, 0, 0, 0],
+				[1, 1, 0, 0, 0, 0, 0],
+				[1, 1, 1, 1, 1, 1, 0],
+				[0, 0, 0, 0, 0, 1, 1],
+				[0, 0, 0, 0, 0, 1, 1],
+				[0, 0, 0, 0, 0, 1, 1],
+				[0, 0, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[0, 1, 1, 1, 1, 1, 0],
+			], // 5
+			[
+				[0, 0, 0, 0, 1, 1, 0],
+				[0, 0, 1, 1, 0, 0, 0],
+				[0, 1, 1, 0, 0, 0, 0],
+				[1, 1, 0, 0, 0, 0, 0],
+				[1, 1, 0, 1, 1, 1, 0],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[0, 1, 1, 1, 1, 1, 0],
+			], // 6
+			[
+				[1, 1, 1, 1, 1, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[0, 0, 0, 0, 1, 1, 0],
+				[0, 0, 0, 0, 1, 1, 0],
+				[0, 0, 0, 1, 1, 0, 0],
+				[0, 0, 0, 1, 1, 0, 0],
+				[0, 0, 1, 1, 0, 0, 0],
+				[0, 0, 1, 1, 0, 0, 0],
+				[0, 0, 1, 1, 0, 0, 0],
+				[0, 0, 1, 1, 0, 0, 0],
+			], // 7
+			[
+				[0, 1, 1, 1, 1, 1, 0],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[0, 1, 1, 1, 1, 1, 0],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[0, 1, 1, 1, 1, 1, 0],
+			], // 8
+			[
+				[0, 1, 1, 1, 1, 1, 0],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[1, 1, 0, 0, 0, 1, 1],
+				[0, 1, 1, 1, 0, 1, 1],
+				[0, 0, 0, 0, 0, 1, 1],
+				[0, 0, 0, 0, 0, 1, 1],
+				[0, 0, 0, 0, 1, 1, 0],
+				[0, 0, 0, 1, 1, 0, 0],
+				[0, 1, 1, 0, 0, 0, 0],
+			], // 9
+			[
+				[0, 0, 0, 0],
+				[0, 0, 0, 0],
+				[0, 1, 1, 0],
+				[0, 1, 1, 0],
+				[0, 0, 0, 0],
+				[0, 0, 0, 0],
+				[0, 1, 1, 0],
+				[0, 1, 1, 0],
+				[0, 0, 0, 0],
+				[0, 0, 0, 0],
+			], // :
+		];
+
+		var balls = [];
+		var colors = [
+			"#33B5E5",
+			"#0099CC",
+			"AA66CC",
+			"#9933CC",
+			"#99CC00",
+			"#669900",
+			"#FFBB33",
+			"#FF8800",
+			"#FF4444",
+			"#CC0000",
+		];
+
+		// const定义的变量不可以修改，而且必须初始化
+		var endTime = new Date();
+    // 获取当前时间，并设置倒计时1个小时（因为是毫秒所以计算：3600 * 1000 = 60分钟）
+		endTime.setTime(endTime.getTime() + 3600 * 1000);
+		var curShowTimeSeconds = 0;
+
+		// 监听页面加载事件，设置绘制的canvas动画效果
+		window.onload = function () {
+			// 页面全局宽、高、外边距、变量（屏幕自适应）
+			canvasWidth = document.body.clientWidth;
+			canvasHeight = document.body.clientHeight;
+			marginTop = Math.round(canvasHeight / 5); // 屏幕的5分之1
+			marginLeft = Math.round(canvasWidth / 10); // 屏幕的10分之1
+			// 每一个小球的半径：
+			// 时钟文字：(canvasWidth * 4) / 5，
+			// 108：renderDigit方法的最后一个是93，占的空间是15个，所以得出108
+			// -1：前面的半径 +1得出的结果，所以最后要-1
+			radius = Math.round((canvasWidth * 4) / 5 / 108) - 1;
+			// canvas的2D上下文属性的获取和设置宽高
+			var canvas = document.getElementById("canvas");
+			var context = canvas.getContext("2d");
+			canvas.width = canvasWidth;
+			canvas.height = canvasHeight;
+			// 倒计时
+			curShowTimeSeconds = getCurrentShowTimeSeconds();
+
+			// 添加时钟的动画效果
+			setInterval(
+				function () {
+					render(context); // 初始化时间
+					update(); // 对时间进行更新
+				},
+				50 // 一秒有1000毫秒，即20分之1，
+				// 所以帧率为20.但事实上，因为里面的函数执行效率不同，所以帧数不一定为20
+			);
+		};
+		// 当前的时间计算
+		function getCurrentShowTimeSeconds() {
+			var currentTime = new Date();
+			// getTime() 方法可返回距 1970 年 1 月 1 日之间的毫秒数。
+			var ret = endTime.getTime() - currentTime.getTime();
+			// 将毫秒化成秒,ret要加上
+			ret = Math.round(ret / 1000);
+			return ret >= 0 ? ret : 0;
+		}
+
+		// 通过比较当前时间和接下来的时间来更新时间-再通过得到的结果计算彩色小球的更新
+		function update() {
+			var nextShowTimeSeconds = getCurrentShowTimeSeconds();
+
+			// 下一个时间
+			var nextHours = parseInt(nextShowTimeSeconds / 3600);
+			var nextMinutes = parseInt((nextShowTimeSeconds - nextHours * 3600) / 60);
+			var nextSeconds = nextShowTimeSeconds % 60;
+			// 当前时间
+			var curHours = parseInt(curShowTimeSeconds / 3600);
+			var curMinutes = parseInt((curShowTimeSeconds - curHours * 3600) / 60);
+			var curSeconds = curShowTimeSeconds % 60;
+
+			if (nextSeconds != curSeconds) {
+				// 更新小球的生成
+				if (parseInt(nextHours / 10) != parseInt(curHours / 10)) {
+					addBalls(marginLeft + 0, marginTop, parseInt(nextHours / 10));
+				}
+				if (parseInt(nextHours % 10) != parseInt(curHours % 10)) {
+					addBalls(
+						marginLeft + 15 * (radius + 1),
+						marginTop,
+						parseInt(nextHours % 10)
+					);
+				}
+				if (parseInt(nextMinutes / 10) != parseInt(curMinutes / 10)) {
+					addBalls(
+						marginLeft + 39 * (radius + 1),
+						marginTop,
+						parseInt(nextMinutes / 10)
+					);
+				}
+				if (parseInt(nextMinutes % 10) != parseInt(curMinutes % 10)) {
+					addBalls(
+						marginLeft + 54 * (radius + 1),
+						marginTop,
+						parseInt(nextMinutes % 10)
+					);
+				}
+				if (parseInt(nextSeconds / 10) != parseInt(curSeconds / 10)) {
+					addBalls(
+						marginLeft + 78 * (radius + 1),
+						marginTop,
+						parseInt(nextSeconds / 10)
+					);
+				}
+				if (parseInt(nextSeconds % 10) != parseInt(curSeconds % 10)) {
+					addBalls(
+						marginLeft + 93 * (radius + 1),
+						marginTop,
+						parseInt(nextSeconds % 10)
+					);
+				}
+				// 更新剩下的时间
+				curShowTimeSeconds = nextShowTimeSeconds;
+			}
+
+			updateBalls();
+			console.log('balls彩色小球的长度(及时清空优化内存后)', balls.length);
+		}
+
+		// 对生成的彩色小球进行运动更新
+		function updateBalls() {
+			for (var i = 0; i < balls.length; i++) {
+				balls[i].x += balls[i].vx;
+				balls[i].y += balls[i].vy;
+				balls[i].vy += balls[i].g;
+
+				// 当小球碰地后会反弹
+				if (canvasHeight - balls[i].y <= radius) {
+					balls[i].y = canvasHeight - radius;
+					// 添加阻力系数：物理碰撞现象（每次碰撞的反弹是上一次的倍数系数）
+					balls[i].vy = -balls[i].vy * 0.75;
+				}
+			}
+
+			// ***** 及时清空跳出画布的小球，优化页面的内存 *****
+			var cnt = 0;
+			for (var i = 0; i < balls.length; i++) {
+				if (balls[i].x + radius > 0 && balls[i].x - radius < canvasWidth) {
+					// 小球数组中的第0个到cnt-1个是在canvas画布中
+					balls[cnt++] = balls[i];
+				}
+			}
+			// Math.min();两个数取最小值（动画性能优化）
+			while (balls.length > Math.min(250, cnt)) {
+				balls.pop(); // 删除第cnt个到balls.length-1个数组
+				// 删除前面的数组使用balls.shift();
+			}
+			// while(balls.length > cnt){
+      //   balls.pop(); // 删除第cnt个到balls.length-1个数组
+      // }
+		}
+
+		// 倒计时变化生成的彩色小球集合，并push到balls[]中
+		function addBalls(x, y, num) {
+			for (var i = 0; i < digit[num].length; i++) {
+				for (var j = 0; j < digit[num][i].length; j++) {
+					if (digit[num][i][j] == 1) {
+						// 定义aBall
+						var aBall = {
+							// 这个圆心的计算和数字时间生成的圆心一样
+							x: x + j * 2 * (radius + 1) + (radius + 1),
+							y: y + i * 2 * (radius + 1) + (radius + 1),
+							// 水平方向x轴的幂运算
+							vx: Math.pow(-1, Math.floor(Math.random() * 1000)) * 5,
+							vy: -5, // 向上抛和再下落的速度
+							g: 1.5 + Math.random(),
+							color: colors[Math.floor(Math.random() * colors.length)],
+						};
+						// 将小球push进集合中，后面的操作和生成彩色小球的方法都需要用到
+						balls.push(aBall);
+					}
+				}
+			}
+		}
+
+		// 绘制画布的时间-初始化时间-绘制时间数字
+		function render(cxt) {
+			// 加上clearRect用于清除矩形,fillRect是填充矩形，参数类似。这样
+			// 后来生成的动画就不会和原来的叠加在一起了
+			cxt.clearRect(0, 0, canvasWidth, canvasHeight); // 从右上角开始，范围是整个画布
+
+			// 获取当前剩下的倒计时时间
+			var hours = parseInt(curShowTimeSeconds / 3600);
+			var minutes = parseInt((curShowTimeSeconds - hours * 3600) / 60);
+			var seconds = curShowTimeSeconds % 60;
+
+			/******* 绘制圆形组件时间数字和冒号 *******/
+			// 绘制小时：parseInt(hours/10)取得hours的十位数
+			renderDigit(marginLeft, marginTop, parseInt(hours / 10), cxt);
+			// 一个圆的直径为2*(radius+1)，一个数字的单列有七个圆
+			renderDigit(
+				marginLeft + 15 * (radius + 1),
+				marginTop,
+				parseInt(hours % 10),
+				cxt
+			);
+			// 绘制冒号，由四个圆组成
+			renderDigit(marginLeft + 30 * (radius + 1), marginTop, 10, cxt);
+			// 绘制分钟
+			renderDigit(
+				marginLeft + 39 * (radius + 1),
+				marginTop,
+				parseInt(minutes / 10),
+				cxt
+			);
+			renderDigit(
+				marginLeft + 54 * (radius + 1),
+				marginTop,
+				parseInt(minutes % 10),
+				cxt
+			);
+			// 绘制冒号，由四个圆组成
+			renderDigit(marginLeft + 69 * (radius + 1), marginTop, 10, cxt);
+			// 绘制秒钟
+			renderDigit(
+				marginLeft + 78 * (radius + 1),
+				marginTop,
+				parseInt(seconds / 10),
+				cxt
+			);
+			renderDigit(
+				marginLeft + 93 * (radius + 1),
+				marginTop,
+				parseInt(seconds % 10),
+				cxt
+			);
+
+			// 对倒计时变化，balls生成弹出的彩色小球进行绘制
+			for (var i = 0; i < balls.length; i++) {
+				cxt.fillStyle = balls[i].color;
+
+				cxt.beginPath();
+				cxt.arc(balls[i].x, balls[i].y, radius, 0, 2 * Math.PI);
+				cxt.closePath();
+
+				cxt.fill();
+			}
+		}
+
+		// 绘制时钟的数字和冒号-每个组成数字的圆的计算
+		function renderDigit(x, y, num, cxt) {
+			cxt.fillStyle = "rgb(0, 102, 153)";
+			// 先绘制出1
+			for (var i = 0; i < digit[num].length; i++) {
+				for (var j = 0; j < digit[num][i].length; j++) {
+					if (digit[num][i][j] == 1) {
+						cxt.beginPath();
+						// 弧形的绘制方法：需要计算
+						cxt.arc(
+							// 圆心的绘制计算
+							x + j * 2 * (radius + 1) + (radius + 1),
+							y + i * 2 * (radius + 1) + (radius + 1),
+							radius,
+							0,
+							2 * Math.PI
+						);
+						cxt.closePath();
+						// cxt.stroke();
+
+						cxt.fill();
+					}
+				}
+			}
+		}
+	</script>
+</html>
